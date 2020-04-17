@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-echo -e "
+echo "
 terraform {
   required_version = \"~> $5\"
 }
@@ -10,7 +10,23 @@ provider google {
   project = \"$2\"
   region  = \"$3\"
   zone    = \"$4\"
-  credentials = file(\"../access-key.json\")
+}
+
+provider google-beta {
+  version = \"$1\"
+  project = \"$2\"
+  region  = \"$3\"
+  zone    = \"$4\"
+}
+
+
+# Reserving a new static external IP address
+# https://cloud.google.com/compute/docs/ip-addresses/reserve-static-external-ip-address#reserve_new_static
+resource google_compute_address \"staticIP\" {
+  name         = \"$6\"
+  project      = \"$2\"
+  region       = \"$3\"
+  address_type = \"EXTERNAL\"
 }
 
 module develop_environment {
@@ -24,7 +40,7 @@ module develop_environment {
 }" >./env/dev/main.tf
 
 
-echo -e "
+echo "
 terraform {
     backend \"gcs\" {
       bucket = \"${10}\"   
@@ -33,10 +49,18 @@ terraform {
 }" >./env/dev/backend.tf
 
 
-echo -e "
+echo "
 output develop_output {
   value = module.develop_environment
 }
 " >./env/dev/outputs.tf
+
+
+
+echo "
+#https://www.terraform.io/docs/providers/google/r/compute_address.html
+terraform import google_compute_address.staticIP \"$2\"/\"$3\"/\"$6\"
+" >./env/dev/import.sh
+
 
 

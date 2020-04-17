@@ -1,0 +1,72 @@
+stages:
+  - apply
+  - destroy
+  
+image: 
+  name: hashicorp/terraform:0.12.24
+  entrypoint:
+    - '/usr/bin/env'
+    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+  
+.runner_tags:
+  tags:
+    - docker
+
+
+apply:development:
+  extends: .runner_tags
+  stage: apply
+  variables:
+      ENVIRONMENT: develop
+  when: manual
+  only: 
+    - development
+  script:
+    - cd ./base-layer
+    - chmod u+x apply.sh
+    - ./apply.sh "dev"
+        
+
+
+destroy:development:
+    extends: .runner_tags
+    stage: destroy
+    variables:
+        ENVIRONMENT: develop
+    when: manual
+    only: 
+        - development
+    script:
+        - cd ./base-layer
+        - chmod u+x destroy.sh
+        - ./destroy.sh "dev"
+
+
+apply:production:
+    extends: .runner_tags
+    stage: apply
+    variables:
+        ENVIRONMENT: production
+    when: manual
+    only: 
+        - master
+    script:
+        - cd ./base-layer
+        - chmod u+x apply.sh
+        - ./apply.sh "prod"
+
+        
+
+destroy:production:
+    extends: .runner_tags
+    stage: destroy
+    variables:
+        ENVIRONMENT: production
+    when: manual
+    only: 
+        - master
+    script:
+        - cd ./base-layer
+        - chmod u+x destroy.sh
+        - ./destroy.sh "prod"

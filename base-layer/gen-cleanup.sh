@@ -1,10 +1,13 @@
-#!/bin/bash
+#!/bin/sh
+
 cwd=$(pwd)
 cd ./storage
-terraform destroy
+terraform init
+terraform destroy -auto-approve
 cd $cwd
 cd ./env/dev
-terraform destroy
+terraform init
+terraform destroy -auto-approve
 cd $cwd
 sudo rm -R ./storage
 sudo rm -R ./env

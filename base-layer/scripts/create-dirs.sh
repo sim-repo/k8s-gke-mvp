@@ -1,13 +1,21 @@
-#!/bin/bash
+#!/bin/sh
 
 # ./storage
+#   ./dev
+#   ./prod
+
 # ./module
 #   ./dev
 #   ./prod
 
-if [ ! -d ./storage ] 
+if [ ! -d ./storage/dev ] 
 then
-    mkdir -p ./storage
+    mkdir -p ./storage/dev
+fi
+
+if [ ! -d ./storage/prod ] 
+then
+    mkdir -p ./storage/prod
 fi
 
 if [ ! -d ./module ] 

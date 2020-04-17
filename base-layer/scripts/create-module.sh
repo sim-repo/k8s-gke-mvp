@@ -1,10 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 
-
-
-
-echo -e "
+echo "
 data google_container_engine_versions \"engine_versions\" {
   location       = var.region
   version_prefix = \"$7\"
@@ -63,17 +60,11 @@ resource google_container_node_pool \"node_pool\" {
   }
 }
 
-resource google_compute_address \"address\" {
-  name         = var.name
-  project      = var.project
-  region       = var.region
-  address_type = \"EXTERNAL\"
-}
 " >./module/cluster.tf
 
 
 
-echo -e "
+echo "
 variable project {
     description = \"GCP project ID\"
     type        = string
